@@ -14,14 +14,14 @@ Style/HashSyntax:
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
-Style/AlignParameters:
+Layout/AlignParameters:
   EnforcedStyle: with_fixed_indentation
 
-Style/MultilineOperationIndentation:
+Layout/MultilineOperationIndentation:
   EnforcedStyle: indented
 
-Style/MultilineMethodCallIndentation:
+Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 
-Style/IndentationWidth:
+Layout/IndentationWidth:
   Width: 2
