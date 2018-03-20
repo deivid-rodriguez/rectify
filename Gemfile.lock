@@ -8,7 +8,7 @@ GIT
 PATH
   remote: .
   specs:
-    rectify (0.10.0)
+    rectify (0.11.0)
       activemodel (>= 4.1.0)
       activerecord (>= 4.1.0)
       activesupport (>= 4.1.0)
@@ -125,7 +125,7 @@ GEM
       coercible (~> 1.0)
       descendants_tracker (~> 0.0, >= 0.0.3)
       equalizer (~> 0.0, >= 0.0.9)
-    wisper (1.6.1)
+    wisper (2.0.0)
 
 PLATFORMS
   ruby
