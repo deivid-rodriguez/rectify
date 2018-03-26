@@ -16,14 +16,14 @@ module Rectify
     attr_reader :attribute_set
 
     def convert_indexed_hashes_to_arrays(attributes_hash)
-      array_attributes.each do |array_attribute|
-        name = array_attribute.name
+      array_attributes.each do |array_attribute_name, array_attribute|
+        name = array_attribute_name
         attribute = attributes_hash[name]
         next unless attribute.is_a?(Hash)
 
         attributes_hash[name] = transform_values_for_type(
           attribute.values,
-          array_attribute.member_type.primitive
+          array_attribute.options[:member]
         )
       end
     end
@@ -32,12 +32,12 @@ module Rectify
       return values unless element_type < Rectify::Form
 
       values.map do |value|
-        self.class.new(element_type.attribute_set).format(value)
+        self.class.new(element_type.schema).format(value)
       end
     end
 
     def array_attributes
-      attribute_set.select { |attribute| attribute.primitive == Array }
+      attribute_set.select { |_name, attribute| attribute.respond_to?(:primitive) && attribute.primitive == Array }
     end
 
     def convert_hash_keys(value)

@@ -1,11 +1,16 @@
+require "dry-struct"
+
 module Rectify
-  class Form
-    include Virtus.model
+  class Form < Dry::Struct
+    transform_types { |t| t.meta(omittable: true) }
+
+    transform_keys(&:to_sym)
+
     include ActiveModel::Validations
 
     attr_reader :context
 
-    attribute :id, Integer
+    attribute :id, Dry::Types["params.integer"]
 
     def self.from_params(params, additional_params = {})
       params_hash = hash_from(params)
@@ -16,7 +21,7 @@ module Rectify
         .merge(additional_params)
 
       formatted_attributes = FormatAttributesHash
-        .new(attribute_set)
+        .new(schema)
         .format(attributes_hash)
 
       new(formatted_attributes)
@@ -39,6 +44,8 @@ module Rectify
     end
 
     def self.infer_model_name
+      return unless name
+
       class_name = name.split("::").last
       return :form if class_name == "Form"
 
@@ -46,7 +53,7 @@ module Rectify
     end
 
     def self.model_name
-      ActiveModel::Name.new(self, nil, mimicked_model_name.to_s.camelize)
+      ActiveModel::Name.new(self, nil, mimicked_model_name.to_s.camelize.presence || inspect)
     end
 
     def self.hash_from(params)
@@ -85,6 +92,12 @@ module Rectify
       id.to_s
     end
 
+    def self.attribute(name, *args)
+      args = [Dry::Types["string"]] if args.empty?
+
+      super(name, *args)
+    end
+
     def attributes
       super.except(:id)
     end
@@ -97,6 +110,10 @@ module Rectify
       # Implement this in your form object for custom mapping from model to form
       # object as part of the `.from_model` call after matching attributes are
       # populated (optional).
+    end
+
+    def model_mapping(_model)
+      {}
     end
 
     def with_context(new_context)

@@ -21,11 +21,11 @@ module Rectify
     end
 
     def collection?
-      type.respond_to?(:member_type)
+      primitive == Array
     end
 
     def element_class
-      type.member_type
+      member
     end
 
     def declared_class

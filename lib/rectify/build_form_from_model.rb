@@ -6,32 +6,25 @@ module Rectify
     end
 
     def build
-      form.tap do
-        matching_attributes.each do |a|
-          model_value = model.public_send(a.name)
-          form.public_send("#{a.name}=", a.value_from(model_value))
-        end
-
-        form.map_model(model)
-      end
+      form_class.new(attributes)
     end
 
     private
 
-    attr_reader :form_class, :form, :model
-
-    def form
-      @form ||= form_class.new
-    end
+    attr_reader :form_class, :model
 
     def attribute_set
-      form_class.attribute_set
+      form_class.schema
     end
 
     def matching_attributes
       attribute_set
-        .select { |a| model.respond_to?(a.name) }
-        .map    { |a| FormAttribute.new(a) }
+        .select { |key, _| model.respond_to?(key) }
+        .each_with_object({}) { |(key, _value), hsh| hsh[key] = model.send(key) }
+    end
+
+    def attributes
+      form_class.model_mapping(model).merge(matching_attributes)
     end
   end
 end
