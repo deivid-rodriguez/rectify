@@ -59,8 +59,6 @@ module Rectify
     end
 
     def valid?(options = {})
-      before_validation
-
       options     = {} if options.blank?
       context     = options[:context]
       validations = [super(context)]
@@ -99,11 +97,6 @@ module Rectify
       # Implement this in your form object for custom mapping from model to form
       # object as part of the `.from_model` call after matching attributes are
       # populated (optional).
-    end
-
-    def before_validation
-      # Implement this in your form object if you would like to perform some
-      # some processing before validation happens (optional).
     end
 
     def with_context(new_context)
