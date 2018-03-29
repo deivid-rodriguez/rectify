@@ -229,7 +229,7 @@ RSpec.describe Rectify::Form do
       )
     end
 
-    it "populates form via custom mapping logic (via #map_model)" do
+    it "populates form via custom mapping logic (via #model_mapping)" do
       form = UserForm.from_model(model)
 
       expect(form.last_login_date).to eq("30/01/2016")
