@@ -112,7 +112,7 @@ module Rectify
       # populated (optional).
     end
 
-    def model_mapping(_model)
+    def self.model_mapping(_model)
       {}
     end
 

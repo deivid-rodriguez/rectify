@@ -234,6 +234,15 @@ RSpec.describe Rectify::Form do
 
       expect(form.last_login_date).to eq("30/01/2016")
     end
+
+    it "populates form from models without custom mapping" do
+      form = ContactForm.from_model(
+        Contact.new(:name => "Peter", :number => "9999")
+      )
+
+      expect(form.name).to eq("Peter")
+      expect(form.number).to eq("9999")
+    end
   end
 
   describe ".from_json" do
